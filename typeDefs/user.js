@@ -4,6 +4,7 @@ module.exports = gql`
   extend type Query {
     users: [User!]
     user(email: String!): User!
+    providers(role: String!): [User!]
   }
 
   extend type Mutation {
@@ -25,6 +26,11 @@ module.exports = gql`
     email: String!
     password: String!
     role: String!
+    gender: String!
+    state: String!
+    city: String!
+    locality: String!
+    address: String!
   }
 
   type User {
@@ -32,7 +38,12 @@ module.exports = gql`
     name: String!
     email: String!
     role: String!
-    createdAt: String!
-    updatedAt: String!
+    gender: String!
+    state: String!
+    city: String!
+    locality: String!
+    address: String!
+    createdAt: Date!
+    updatedAt: Date!
   }
 `;

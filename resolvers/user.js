@@ -29,6 +29,19 @@ module.exports = {
         throw error;
       }
     },
+    providers: async (_, { role }) => {
+      try {
+        console.log("===", role);
+        const user = await User.find({ role });
+        if (!user) {
+          throw new Error("User not found");
+        }
+        return user;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
   },
 
   Mutation: {

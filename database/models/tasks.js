@@ -1,40 +1,41 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const taskSchema = new mongoose.Schema(
   {
-    name: {
+    consumerName: {
       type: String,
       required: true,
     },
-    email: {
+    consumerEmail: {
       type: String,
       required: true,
     },
-    password: {
+    providerName: {
       type: String,
       required: true,
     },
-    role: {
+    providerEmail: {
       type: String,
       required: true,
     },
-    gender: {
+
+    service: {
       type: String,
       required: true,
     },
-    state: {
+    category: {
       type: String,
       required: true,
     },
-    city: {
+    status: {
       type: String,
       required: true,
     },
-    locality: {
+    bookingDate: {
       type: String,
       required: true,
     },
-    address: {
+    bookingSlot: {
       type: String,
       required: true,
     },
@@ -44,4 +45,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Task", taskSchema);
