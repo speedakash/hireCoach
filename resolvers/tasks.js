@@ -7,10 +7,10 @@ const { combineResolvers } = require("graphql-resolvers");
 
 module.exports = {
   Query: {
-    tasks: async (_, { skip, limit }) => {
+    tasks: async (_, { consumerEmail, skip, limit }) => {
       try {
         //console.log("===", Task.find({}));
-        const tasks = await Task.find()
+        const tasks = await Task.find({ consumerEmail: consumerEmail })
           .sort({ _id: -1 })
           .skip(skip)
           .limit(limit + 1);
@@ -22,13 +22,31 @@ module.exports = {
     },
     providerTasks: async (_, { providerEmail, bookingDate }) => {
       try {
-        //console.log("===", Task.find({}));
         const tasks = await Task.find({
           providerEmail: providerEmail,
           bookingDate: bookingDate,
         });
         return tasks;
       } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    ongoingTask: async (_, { consumerEmail, status1, status2 }) => {
+      try {
+        const tasks = await Task.find({
+          consumerEmail: consumerEmail,
+          $or: [
+            {
+              status: status1,
+            },
+            {
+              status: status2,
+            },
+          ],
+        });
+        return tasks;
+      } catch {
         console.log(error);
         throw error;
       }
@@ -43,6 +61,19 @@ module.exports = {
         const newTask = new Task({ ...input });
         const result = await newTask.save();
         return result;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    updateTask: async (_, { id, status }) => {
+      try {
+        const task = await Task.findByIdAndUpdate(
+          id,
+          { status: status },
+          { new: true }
+        );
+        return task;
       } catch (error) {
         console.log(error);
         throw error;

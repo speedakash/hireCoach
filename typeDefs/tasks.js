@@ -2,12 +2,18 @@ const { gql } = require("apollo-server-express");
 
 module.exports = gql`
   extend type Query {
-    tasks(skip: Int, limit: Int): [Task!]
+    tasks(consumerEmail: String!, skip: Int, limit: Int): [Task!]
+    ongoingTask(
+      consumerEmail: String!
+      status1: String!
+      status2: String!
+    ): [Task!]
     providerTasks(providerEmail: String!, bookingDate: String!): [Task]
   }
 
   extend type Mutation {
     addTask(input: taskInput): Task
+    updateTask(id: ID!, status: String!): Task
   }
 
   input taskInput {
@@ -23,7 +29,7 @@ module.exports = gql`
   }
 
   type Task {
-    id: String!
+    id: ID!
     consumerEmail: String!
     consumerName: String!
     providerEmail: String!
@@ -34,5 +40,6 @@ module.exports = gql`
     bookingDate: String!
     bookingSlot: String!
     createdAt: Date!
+    updatedAt: Date!
   }
 `;
