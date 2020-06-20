@@ -13,7 +13,7 @@ module.exports = gql`
 
   input serviceInput {
     name: String!
-    category: [String!]
+    category: String!
   }
 
   type Category {
@@ -26,6 +26,6 @@ module.exports = gql`
 
   type Service {
     name: String!
-    category: [String!]
+    category: String!
   }
 `;

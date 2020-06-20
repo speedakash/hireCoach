@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    mySkills: {
+      type: Array,
+      required: false,
+    },
   },
   {
     timestamps: true,

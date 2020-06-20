@@ -20,6 +20,19 @@ module.exports = {
         throw error;
       }
     },
+    providerAlltasks: async (_, { providerEmail, skip, limit }) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.find({ providerEmail: providerEmail })
+          .sort({ _id: -1 })
+          .skip(skip)
+          .limit(limit + 1);
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
     providerTasks: async (_, { providerEmail, bookingDate }) => {
       try {
         const tasks = await Task.find({
@@ -36,6 +49,25 @@ module.exports = {
       try {
         const tasks = await Task.find({
           consumerEmail: consumerEmail,
+          $or: [
+            {
+              status: status1,
+            },
+            {
+              status: status2,
+            },
+          ],
+        });
+        return tasks;
+      } catch {
+        console.log(error);
+        throw error;
+      }
+    },
+    ongoingProviderTask: async (_, { providerEmail, status1, status2 }) => {
+      try {
+        const tasks = await Task.find({
+          providerEmail: providerEmail,
           $or: [
             {
               status: status1,

@@ -8,7 +8,13 @@ module.exports = gql`
       status1: String!
       status2: String!
     ): [Task!]
+    ongoingProviderTask(
+      providerEmail: String!
+      status1: String!
+      status2: String!
+    ): [Task!]
     providerTasks(providerEmail: String!, bookingDate: String!): [Task]
+    providerAlltasks(providerEmail: String!, skip: Int, limit: Int): [Task]
   }
 
   extend type Mutation {

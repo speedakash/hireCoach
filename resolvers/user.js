@@ -76,5 +76,18 @@ module.exports = {
         throw error;
       }
     },
+    updateSkills: async (_, { id, services }) => {
+      try {
+        const user = await User.findByIdAndUpdate(
+          id,
+          { $set: { mySkills: services } },
+          { new: true }
+        );
+        return user;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
   },
 };
