@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: false,
+    },
     locality: {
       type: String,
       required: true,

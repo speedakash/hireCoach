@@ -5,12 +5,14 @@ module.exports = gql`
     users: [User!]
     user(email: String!): User!
     providers(role: String!): [User!]
+    consumersOrprovider(role: String!): [User]
   }
 
   extend type Mutation {
     signup(input: signupInput): User
     login(input: loginInput): User
     updateSkills(id: ID!, services: [String]): User
+    updateUser(id: ID!, status: String!): User
   }
 
   input loginInput {
@@ -45,6 +47,7 @@ module.exports = gql`
     locality: String!
     address: String!
     createdAt: Date!
+    status: String
     updatedAt: Date!
     mySkills: [String]
   }

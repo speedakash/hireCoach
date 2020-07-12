@@ -7,6 +7,16 @@ const { combineResolvers } = require("graphql-resolvers");
 
 module.exports = {
   Query: {
+    getAlltasks: async (_, {}) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.find().sort({ _id: -1 });
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
     tasks: async (_, { consumerEmail, skip, limit }) => {
       try {
         //console.log("===", Task.find({}));
@@ -20,6 +30,7 @@ module.exports = {
         throw error;
       }
     },
+
     providerAlltasks: async (_, { providerEmail, skip, limit }) => {
       try {
         //console.log("===", Task.find({}));

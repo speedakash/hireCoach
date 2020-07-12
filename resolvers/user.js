@@ -16,6 +16,15 @@ module.exports = {
         throw error;
       }
     },
+    consumersOrprovider: async (_, { role }) => {
+      try {
+        const users = await User.find({ role });
+        return users;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
     user: async (_, { email }) => {
       try {
         console.log("===", email);
@@ -81,6 +90,19 @@ module.exports = {
         const user = await User.findByIdAndUpdate(
           id,
           { $set: { mySkills: services } },
+          { new: true }
+        );
+        return user;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    updateUser: async (_, { id, status }) => {
+      try {
+        const user = await User.findByIdAndUpdate(
+          id,
+          { status: status },
           { new: true }
         );
         return user;

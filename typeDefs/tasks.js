@@ -2,6 +2,7 @@ const { gql } = require("apollo-server-express");
 
 module.exports = gql`
   extend type Query {
+    getAlltasks: [Task!]
     tasks(consumerEmail: String!, skip: Int, limit: Int): [Task!]
     ongoingTask(
       consumerEmail: String!
