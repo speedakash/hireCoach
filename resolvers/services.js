@@ -6,6 +6,14 @@ const jwt = require("jsonwebtoken");
 const { combineResolvers } = require("graphql-resolvers");
 const fs = require("fs");
 
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "htuyz7xjo",
+  api_key: "324214576767794",
+  api_secret: "rP76WjIM2ZU4P8svhJ6AYochyaA",
+});
+
 module.exports = {
   Query: {
     services: async () => {
@@ -31,7 +39,7 @@ module.exports = {
   },
 
   Mutation: {
-    addService: async (_, { name, category, iconName }) => {
+    addService: async (_, { name, category, iconName, iconPath, status }) => {
       try {
         const service = await Service.findOne({ name: name });
         if (service) {
@@ -42,6 +50,8 @@ module.exports = {
           name: name,
           category: category,
           iconName: iconName,
+          iconPath: iconPath,
+          status: status,
         });
         const result = await newService.save();
         return result;
@@ -59,6 +69,19 @@ module.exports = {
         const newCategory = new Category({ ...input });
         const result = await newCategory.save();
         return result;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    updateService: async (_, { id, status }) => {
+      try {
+        const user = await Service.findByIdAndUpdate(
+          id,
+          { status: status },
+          { new: true }
+        );
+        return user;
       } catch (error) {
         console.log(error);
         throw error;
@@ -86,16 +109,30 @@ module.exports = {
     //     throw error;
     //   }
     // },
-    singleUpload: (parent, args) => {
-      return args.file.then((file) => {
-        const { createReadStream, filename, mimetype } = file;
+    singleUpload: async (parent, { file }) => {
+      const { filename, createReadStream } = await file;
 
-        const fileStream = createReadStream();
+      try {
+        const result = await new Promise((resolve, reject) => {
+          createReadStream().pipe(
+            cloudinary.uploader.upload_stream((error, result) => {
+              if (error) {
+                reject(error);
+              }
 
-        fileStream.pipe(fs.createWriteStream(`./uploadedFiles/${filename}`));
+              resolve(result);
+            })
+          );
+        });
+        console.log(result);
 
-        return file;
-      });
+        if (result) {
+          const url = result.secure_url;
+          return { filename: filename, path: url };
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };

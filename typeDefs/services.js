@@ -7,21 +7,29 @@ module.exports = gql`
   }
 
   extend type Mutation {
-    addService(name: String!, category: String!, iconName: String!): Service
+    addService(
+      name: String!
+      category: String!
+      iconName: String!
+      iconPath: String!
+      status: String
+    ): Service
     addCategory(input: categoryInput): Category
     singleUpload(file: Upload!): File!
+    updateService(id: ID!, status: String!): Service
   }
 
   type File {
     filename: String!
-    mimetype: String!
-    encoding: String!
+    path: String!
   }
 
   input serviceInput {
     name: String!
     category: String!
     iconName: String!
+    iconPath: String!
+    status: String
   }
 
   type Category {
@@ -33,8 +41,11 @@ module.exports = gql`
   }
 
   type Service {
+    id: ID!
     name: String!
     category: String!
     iconName: String!
+    iconPath: String!
+    status: String
   }
 `;
