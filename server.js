@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotEnv = require("dotenv");
 
 const { connection } = require("./database/util");
+const { graphqlUploadExpress } = require("graphql-upload");
 
 const resolvers = require("./resolvers");
 const typeDefs = require("./typeDefs");
@@ -29,6 +30,8 @@ const apolloServer = new ApolloServer({
 });
 
 apolloServer.applyMiddleware({ app, path: "/graphql" });
+
+//app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
 app.use("/", (req, res, next) => {
   res.send({ message: "Hello" });

@@ -4,6 +4,7 @@ const Category = require("../database/models/category");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { combineResolvers } = require("graphql-resolvers");
+const fs = require("fs");
 
 module.exports = {
   Query: {
@@ -30,14 +31,18 @@ module.exports = {
   },
 
   Mutation: {
-    addService: async (_, { input }) => {
+    addService: async (_, { name, category, iconName }) => {
       try {
-        const service = await Service.findOne({ name: input.name });
+        const service = await Service.findOne({ name: name });
         if (service) {
           throw new Error("Service already present");
         }
 
-        const newService = new Service({ ...input });
+        const newService = new Service({
+          name: name,
+          category: category,
+          iconName: iconName,
+        });
         const result = await newService.save();
         return result;
       } catch (error) {
@@ -58,6 +63,39 @@ module.exports = {
         console.log(error);
         throw error;
       }
+    },
+    // singleUpload: async (_, { file }) => {
+    //   try {
+    //     const { stream, filename, mimetype, encoding } = await file;
+
+    //     // 1. Validate file metadata.
+
+    //     // 2. Stream file contents into cloud storage:
+    //     // https://nodejs.org/api/stream.html
+
+    //     // 3. Record the file upload in your DB.
+    //     // const id = await recordFile( … )
+
+    //     const fileStream = stream();
+
+    //     fileStream.pipe(fs.createWriteStream(`./uploadedFiles/${filename}`));
+
+    //     return { filename, mimetype, encoding };
+    //   } catch (error) {
+    //     console.log(error);
+    //     throw error;
+    //   }
+    // },
+    singleUpload: (parent, args) => {
+      return args.file.then((file) => {
+        const { createReadStream, filename, mimetype } = file;
+
+        const fileStream = createReadStream();
+
+        fileStream.pipe(fs.createWriteStream(`./uploadedFiles/${filename}`));
+
+        return file;
+      });
     },
   },
 };
