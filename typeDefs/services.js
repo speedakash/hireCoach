@@ -14,9 +14,10 @@ module.exports = gql`
       iconPath: String!
       status: String
     ): Service
-    addCategory(input: categoryInput): Category
+    addCategory(name: String!, status: String!): Category
     singleUpload(file: Upload!): File!
     updateService(id: ID!, status: String!): Service
+    updateCategory(id: ID!, status: String!): Category
   }
 
   type File {
@@ -33,7 +34,9 @@ module.exports = gql`
   }
 
   type Category {
+    id: ID!
     name: String!
+    status: String!
   }
 
   input categoryInput {

@@ -60,13 +60,13 @@ module.exports = {
         throw error;
       }
     },
-    addCategory: async (_, { input }) => {
+    addCategory: async (_, { name, status }) => {
       try {
-        const category = await Category.findOne({ name: input.name });
+        const category = await Category.findOne({ name: name, status: status });
         if (category) {
           throw new Error("Category already present");
         }
-        const newCategory = new Category({ ...input });
+        const newCategory = new Category({ name: name, status: status });
         const result = await newCategory.save();
         return result;
       } catch (error) {
@@ -77,6 +77,19 @@ module.exports = {
     updateService: async (_, { id, status }) => {
       try {
         const user = await Service.findByIdAndUpdate(
+          id,
+          { status: status },
+          { new: true }
+        );
+        return user;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    updateCategory: async (_, { id, status }) => {
+      try {
+        const user = await Category.findByIdAndUpdate(
           id,
           { status: status },
           { new: true }

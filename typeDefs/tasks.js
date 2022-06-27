@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express");
 
 module.exports = gql`
   extend type Query {
-    getAlltasks: [Task!]
+    getAlltasks(skip: Int, limit: Int): [Task!]
     tasks(consumerEmail: String!, skip: Int, limit: Int): [Task!]
     ongoingTask(
       consumerEmail: String!
@@ -16,11 +16,16 @@ module.exports = gql`
     ): [Task!]
     providerTasks(providerEmail: String!, bookingDate: String!): [Task]
     providerAlltasks(providerEmail: String!, skip: Int, limit: Int): [Task]
+    getTotalTaskCount: Int
+    getTotalTaskCountByDate(date: Date!): Int
+    getTotalTaskCountByEmail(email: String!, role: String!): Int
+    getTotalTaskByEmail(email: String!, role: String!): [Task]
+    getTaskByDate(date: String!, skip: Int, limit: Int): [Task]
   }
 
   extend type Mutation {
-    addTask(input: taskInput): Task
-    updateTask(id: ID!, status: String!): Task
+    addTask(input: taskInput, taskDetails:TaskStatus): Task
+    updateTask(id: ID!, status: String!, taskDetails:TaskStatus): Task
   }
 
   input taskInput {
@@ -33,7 +38,30 @@ module.exports = gql`
     status: String!
     bookingDate: String!
     bookingSlot: String!
+    taskType: String!
+    courseDeliveryMethod: String
+    courseDeliveryAddress: String
+    courseStartDate: String
+    courseEndDate: String
+    courseVideoLink: String
   }
+
+  type Count {
+    total: Int!
+  }
+
+ input TaskStatus{
+  status: String!
+  startDate: String!
+  endDate: String!
+ }
+ type TaskDetails{
+  status: String!
+  startDate: String!
+  endDate: String!
+ }
+
+
 
   type Task {
     id: ID!
@@ -44,9 +72,16 @@ module.exports = gql`
     service: String!
     category: String!
     status: String!
+    taskDetails: [TaskDetails]
     bookingDate: String!
     bookingSlot: String!
     createdAt: Date!
     updatedAt: Date!
+    taskType: String!
+    courseDeliveryMethod: String
+    courseDeliveryAddress: String
+    courseStartDate: String
+    courseEndDate: String
+    courseVideoLink: String
   }
 `;

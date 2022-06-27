@@ -18,7 +18,6 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
     service: {
       type: String,
       required: true,
@@ -39,6 +38,34 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    taskType:{
+      type: String,
+      required: true,
+    },
+    courseDeliveryMethod:{
+      type: String,
+      required: true,
+    },
+    courseDeliveryAddress:{
+      type: String,
+      required: false,
+    },
+    courseStartDate:{
+      type: String,
+      required: false,
+    },
+    courseEndDate:{
+      type: String,
+      required: false,
+    },
+    courseVideoLink:{
+      type: String,
+      required: false,
+    },
+    taskDetails:{
+      type: Array,
+      required: false,
+    }
   },
   {
     timestamps: true,

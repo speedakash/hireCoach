@@ -7,10 +7,46 @@ const { combineResolvers } = require("graphql-resolvers");
 
 module.exports = {
   Query: {
-    getAlltasks: async (_, {}) => {
+    getAlltasks: async (_, { skip, limit }) => {
       try {
         //console.log("===", Task.find({}));
-        const tasks = await Task.find().sort({ _id: -1 });
+        const tasks = await Task.find()
+          .sort({ _id: -1 })
+          .skip(skip)
+          .limit(limit + 1);
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTotalTaskCount: async () => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.countDocuments();
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTotalTaskCountByDate: async (_, { date }) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.countDocuments({ bookingDate: date });
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTaskByDate: async (_, { date, skip, limit }) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.find({ bookingDate: date })
+          .sort({ _id: -1 })
+          .skip(skip)
+          .limit(limit + 1);
         return tasks;
       } catch (error) {
         console.log(error);
@@ -24,6 +60,26 @@ module.exports = {
           .sort({ _id: -1 })
           .skip(skip)
           .limit(limit + 1);
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTotalTaskCountByEmail: async (_,{email, role}) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.countDocuments(role === "consumer" ? {consumerEmail: email} : {providerEmail: email});
+        return tasks;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTotalTaskByEmail: async (_,{email, role}) => {
+      try {
+        //console.log("===", Task.find({}));
+        const tasks = await Task.find(role === "consumer" ? {consumerEmail: email} : {providerEmail: email});
         return tasks;
       } catch (error) {
         console.log(error);
@@ -97,11 +153,11 @@ module.exports = {
   },
 
   Mutation: {
-    addTask: async (_, { input }) => {
+    addTask: async (_, { input, taskDetails }) => {
       try {
         // const task = await Task.findOne({ name: input.name });
 
-        const newTask = new Task({ ...input });
+        const newTask = new Task({ ...input, taskDetails:[taskDetails] });
         const result = await newTask.save();
         return result;
       } catch (error) {
@@ -109,11 +165,11 @@ module.exports = {
         throw error;
       }
     },
-    updateTask: async (_, { id, status }) => {
+    updateTask: async (_, { id, status, taskDetails }) => {
       try {
         const task = await Task.findByIdAndUpdate(
           id,
-          { status: status },
+          { status: status, $push :{ taskDetails: taskDetails} },
           { new: true }
         );
         return task;

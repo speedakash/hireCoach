@@ -46,6 +46,18 @@ const userSchema = new mongoose.Schema(
       type: Array,
       required: false,
     },
+    profilePath:{
+      type: String,
+      required: false,
+    },
+    rating:{
+      type: String,
+      required: false,
+    },
+    skillDetails:{
+      type: Array,
+      required: false,
+    }
   },
   {
     timestamps: true,
