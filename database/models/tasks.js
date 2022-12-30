@@ -65,7 +65,19 @@ const taskSchema = new mongoose.Schema(
     taskDetails:{
       type: Array,
       required: false,
-    }
+    },
+    paymentStatus: {
+      type: Boolean,
+      required: false
+    },
+    paymentType: {
+      type: String,
+      required: false
+    },
+    totalPayment: {
+      type: Number,
+      required: false
+    },
   },
   {
     timestamps: true,

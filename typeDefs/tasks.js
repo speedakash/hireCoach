@@ -44,6 +44,9 @@ module.exports = gql`
     courseStartDate: String
     courseEndDate: String
     courseVideoLink: String
+    paymentStatus: Boolean
+    paymentType: String
+    totalPayment: Int
   }
 
   type Count {
@@ -83,5 +86,8 @@ module.exports = gql`
     courseStartDate: String
     courseEndDate: String
     courseVideoLink: String
+    paymentStatus: Boolean
+    paymentType: String
+    totalPayment: Int
   }
 `;
