@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports.connection = async () =>{
     try{
-        await mongoose.connect('mongodb+srv://speed:Speed2Akash@cluster0.wcqw1.mongodb.net/hirecoach?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true});
+        await mongoose.connect(process.env.MONGO_DB_URL , { useNewUrlParser: true, useUnifiedTopology: true});
         console.log("Database Connection successful");
     }catch(error){
         console.log(error);

@@ -55,8 +55,11 @@ const resolvers = require("./resolvers");
 const typeDefs = require("./typeDefs");
 const { connection } = require("./database/util");
 const app = express();
+const dotEnv = require("dotenv");
+dotEnv.config();
 connection();
 const httpServer = http.createServer(app);
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -73,7 +76,7 @@ const startFunction = async() =>{
     }),
   );
   
-  await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+  await new Promise((resolve) => httpServer.listen({ port: process.env.PORT }, resolve));
   console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 }
 startFunction();
