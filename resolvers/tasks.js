@@ -156,7 +156,7 @@ module.exports = {
     addTask: async (_, { input, taskDetails }) => {
       try {
         // const task = await Task.findOne({ name: input.name });
-
+        console.log('inputs', input);
         const newTask = new Task({ ...input, taskDetails:[taskDetails] });
         const result = await newTask.save();
         return result;

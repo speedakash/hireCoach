@@ -30,6 +30,7 @@ module.exports = {
       try {
         console.log("===", Category.find({}));
         const categories = await Category.find();
+        console.log("===!!!!", categories);
         return categories;
       } catch (error) {
         console.log(error);
@@ -129,6 +130,7 @@ module.exports = {
         const result = await new Promise((resolve, reject) => {
           createReadStream().pipe(
             cloudinary.uploader.upload_stream((error, result) => {
+              console.log('error', error);
               if (error) {
                 reject(error);
               }
@@ -137,7 +139,7 @@ module.exports = {
             })
           );
         });
-        console.log(result);
+        console.log('uploadresult',result);
 
         if (result) {
           const url = result.secure_url;

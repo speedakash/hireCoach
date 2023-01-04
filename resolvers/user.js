@@ -80,7 +80,9 @@ module.exports = {
     },
     login: async (_, { input }) => {
       try {
-        const user = await User.findOne({ email: input.email });
+        console.log('input', input);
+        const user = await User.findOne({ email: input.email }).exec();
+        console.log('user', user);
         if (!user) {
           throw new Error("User not found");
         }

@@ -1,6 +1,7 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require("@apollo/server");
 
-module.exports = gql`
+module.exports = `
+  scalar Upload
   extend type Query {
     getAlltasks(skip: Int, limit: Int): [Task!]
     tasks(consumerEmail: String!, skip: Int, limit: Int): [Task!]
